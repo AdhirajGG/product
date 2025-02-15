@@ -9,34 +9,50 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 // Signup Endpoint
 router.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
+  
   try {
-    // Check if a user with the email already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User already exists" });
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide all required fields"
+      });
     }
 
-    // Hash the password
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User already exists with this email"
+      });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ name, email, password: hashedPassword });
+    const savedUser = await newUser.save();
 
-    // Create the new user
-    const user = new User({ name, email, password: hashedPassword });
-    await user.save();
-
-    // Generate a JWT token (optional)
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { userId: savedUser._id },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     res.status(201).json({
       success: true,
       message: "User created successfully",
       token,
-      user: { id: user._id, name: user.name, email: user.email },
+      user: {
+        id: savedUser._id,
+        name: savedUser.name,
+        email: savedUser.email
+      }
     });
+
   } catch (error) {
     console.error("Signup error:", error);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: error.message || "Server error during signup"
+    });
   }
 });
 
