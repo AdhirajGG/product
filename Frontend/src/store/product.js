@@ -107,9 +107,9 @@ export const useProductStore = create((set) => ({
 
   fetchProducts: async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token")?.trim();
       console.log("Token in fetchProducts:", token); // Debug: Should log a valid token string
-      const res = await fetch("/api/products", {
+      const res = await fetch(`/api/products/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
