@@ -21,9 +21,9 @@ const LoginPage = () => {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      if (data.success) {
-        console.log("Logged in!", data);
-        // Update auth context
+      console.log("Login response data:", data);
+      if (data.success && data.token) {
+        localStorage.setItem("token", data.token);
         login(data.user);
         navigate("/");
       } else {
@@ -33,6 +33,7 @@ const LoginPage = () => {
       console.error("Error during login:", error);
     }
   };
+  
 
   return (
     <Container maxWidth="sm">
