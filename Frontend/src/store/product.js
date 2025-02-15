@@ -126,7 +126,14 @@ export const useProductStore = create((set) => ({
 
   deleteProduct: async (pid) => {
     try {
-      const res = await fetch(`/api/products/${pid}`, { method: "DELETE" });
+      const token = localStorage.getItem("token")?.trim();
+      const res = await fetch(`/api/products/${pid}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token ? `Bearer ${token}` : "",
+        },
+      });
       const data = await res.json();
       if (!data.success) return { success: false, message: data.message };
       set((state) => ({
@@ -141,9 +148,13 @@ export const useProductStore = create((set) => ({
 
   updateProduct: async (pid, updatedProduct) => {
     try {
+      const token = localStorage.getItem("token")?.trim();
       const res = await fetch(`/api/products/${pid}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token ? `Bearer ${token}` : "",
+        },
         body: JSON.stringify(updatedProduct),
       });
       const data = await res.json();
