@@ -1,16 +1,16 @@
-// In LoginPage.jsx
 import React, { useState } from "react";
 import { Container, Box, Typography, Button, Grid, Link } from "@mui/material";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useColorModeValue } from "../Components/ui/color-mode";
 import { Input } from "@chakra-ui/react";
-import { useAuth } from "../Context/authContext.jsx"; // Use correct path
+import { useAuth } from "../Context/authContext.jsx";
+import toast, { Toaster } from "react-hot-toast"; // Add toast import
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); // Get the login function from the context
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -20,23 +20,28 @@ const LoginPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+      
       const data = await response.json();
-      console.log("Login response data:", data);
+      
       if (data.success && data.token) {
         localStorage.setItem("token", data.token);
         login(data.user);
+        toast.success("Login successful!"); // Success notification
         navigate("/");
       } else {
-        console.error("Login failed:", data.message || response.statusText);
+        const errorMessage = data.message || "Invalid email or password";
+        toast.error(errorMessage); // Error notification
+        console.error("Login failed:", errorMessage);
       }
     } catch (error) {
       console.error("Error during login:", error);
+      toast.error("Network error - failed to connect"); // Network error notification
     }
   };
-  
 
   return (
     <Container maxWidth="sm">
+      <Toaster position="top-center" /> {/* Add Toaster component */}
       <Box
         sx={{
           mt: 8,
