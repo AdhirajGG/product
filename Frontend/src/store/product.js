@@ -1,14 +1,16 @@
 import { create } from "zustand";
 
-const API_URL = process.env.VITE_API_URL || "http://localhost:5000/api";
+// Correct environment variable usage
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export const useProductStore = create((set) => ({
   products: [],
   setProducts: (products) => set({ products }),
+
   // Create Product
   createProduct: async (productData, token) => {
     try {
-      const response = await fetch(`${API_URL}/products`, {
+      const response = await fetch(`${API_URL}/api/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,7 +25,7 @@ export const useProductStore = create((set) => ({
         return { success: false, message: data.message || "Failed to create product" };
       }
 
-      return { success: true, message: "Product created successfully" };
+      return { success: true, data: data.data };
     } catch (error) {
       return { success: false, message: error.message };
     }
@@ -32,10 +34,8 @@ export const useProductStore = create((set) => ({
   // Fetch Products
   fetchProducts: async (token) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/products`, {
-        method: "GET",
+      const response = await fetch(`${API_URL}/api/products`, {
         headers: {
-          "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
       });
@@ -43,25 +43,24 @@ export const useProductStore = create((set) => ({
       const data = await response.json();
       
       if (!response.ok) {
-        return { success: false, message: data.message || "Failed to fetch products" };
+        set({ products: [] });
+        return { success: false, message: data.message };
       }
 
-      set({ products: Array.isArray(data.data) ? data.data : [] });
-      return { success: true, data: data.data };
-
+      set({ products: data.data });
+      return { success: true };
     } catch (error) {
-      console.error("Error fetching products:", error);
-      return { success: false, message: "Failed to fetch products" };
+      set({ products: [] });
+      return { success: false, message: "Network error" };
     }
   },
 
   // Delete Product
   deleteProduct: async (pid, token) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/products/${pid}`, {
+      const response = await fetch(`${API_URL}/api/products/${pid}`, {
         method: "DELETE",
         headers: {
-          "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
       });
@@ -69,24 +68,22 @@ export const useProductStore = create((set) => ({
       const data = await response.json();
       
       if (!response.ok) {
-        return { success: false, message: data.message || "Failed to delete product" };
+        return { success: false, message: data.message };
       }
 
       set((state) => ({
-        products: state.products.filter((product) => product._id !== pid),
+        products: state.products.filter((product) => product._id !== pid)
       }));
-      return { success: true, message: "Product deleted successfully" };
-
+      return { success: true };
     } catch (error) {
-      console.error("Error deleting product:", error);
-      return { success: false, message: "Failed to delete product" };
+      return { success: false, message: "Network error" };
     }
   },
 
   // Update Product
   updateProduct: async (pid, updatedProduct, token) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/products/${pid}`, {
+      const response = await fetch(`${API_URL}/api/products/${pid}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -98,19 +95,17 @@ export const useProductStore = create((set) => ({
       const data = await response.json();
       
       if (!response.ok) {
-        return { success: false, message: data.message || "Failed to update product" };
+        return { success: false, message: data.message };
       }
 
       set((state) => ({
         products: state.products.map((product) =>
           product._id === pid ? data.data : product
-        ),
+        )
       }));
-      return { success: true, message: "Product updated successfully" };
-
+      return { success: true };
     } catch (error) {
-      console.error("Error updating product:", error);
-      return { success: false, message: "Failed to update product" };
+      return { success: false, message: "Network error" };
     }
   },
 }));
