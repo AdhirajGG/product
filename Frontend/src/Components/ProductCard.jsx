@@ -399,7 +399,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { FiX, FiCheck } from "react-icons/fi";
 import { Atom } from "react-loading-indicators";
-import { useProductStore } from "../store/product";
+import { useProductStore } from "../store/product.js";
 
 const CustomCard = ({ children, colors }) => (
   <div

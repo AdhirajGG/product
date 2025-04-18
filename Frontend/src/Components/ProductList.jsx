@@ -124,8 +124,8 @@ import {
   Spinner,
   useToast
 } from '@chakra-ui/react';
-import { useAuth } from '../Context/AuthContext';
-import { useProductStore } from '../store/product';
+import { useAuth } from '../Context/AuthContext.jsx';
+import { useProductStore } from '../store/product.js';
 import ProductCard from './ProductCard';
 
 const ProductList = () => {

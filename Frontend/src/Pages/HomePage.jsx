@@ -76,7 +76,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, SimpleGrid, Text, VStack, Box, Spinner } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { useProductStore } from '../store/product';
-import ProductCard from '../Components/ProductCard';
+import ProductCard from '../Components/ProductCard.jsx';
 import { useAuth } from '../Context/AuthContext.jsx';
 
 const HomePage = () => {
