@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
+const JWT_SECRET = process.env.JWT_SECRET|| "your_jwt_secret";
 
 // Signup Endpoint
 router.post("/signup", async (req, res) => {
@@ -56,42 +56,46 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// Login Endpoint
+// auth.js (corrected login route)
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    // Find the user by email
     const user = await User.findOne({ email });
+    
     if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid credentials" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials"
+      });
     }
 
-    // Compare the provided password with the stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid credentials" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials"
+      });
     }
 
-    // Generate a JWT token
+    // Fix: Changed from savedUser._id to user._id
     const token = jwt.sign(
-      { id: savedUser._id }, // 👈 Changed key from 'userId' to 'id'
-      JWT_SECRET,
+      { id: user._id }, // 👈 Corrected variable name
+      process.env.JWT_SECRET, // Ensure this is set
       { expiresIn: "1h" }
     );
 
     res.json({
       success: true,
-      message: "Logged in successfully",
       token,
-      user: { id: user._id, name: user.name, email: user.email },
+      user: { id: user._id, name: user.name, email: user.email }
     });
+    
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error - " + error.message
+    });
   }
 });
 
