@@ -7,7 +7,7 @@ import { useAuth } from "../Context/AuthContext.jsx";
 import toast, { Toaster } from "react-hot-toast"; // Add toast import
 
  
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL;
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
