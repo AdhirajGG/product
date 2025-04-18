@@ -16,7 +16,7 @@ const __dirname = path.resolve();
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: URL,
   credentials: true
 }));
 
@@ -35,5 +35,5 @@ app.get("*", (req, res) => {
 connectDB();
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${URL}`);
+  console.log(`Server running on port ${PORT}`);
 });
