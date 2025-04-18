@@ -5,17 +5,20 @@ import { useColorModeValue } from "../Components/ui/color-mode";
 import { Input } from "@chakra-ui/react";
 import { useAuth } from "../Context/AuthContext.jsx";
 import toast, { Toaster } from "react-hot-toast"; // Add toast import
-
+import dotenv from "dotenv";
+ 
+const URL = process.env.URL || "http://localhost:5173"
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
+ 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch(`${URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

@@ -295,7 +295,7 @@ const ProductCard = ({ product }) => {
 
               <CustomInput
                 label="Image URL"
-                placeholder="https://example.com/image.jpg"
+                placeholder="https://images.unsplash.com/32/Mc8kW4x9Q3aRR3RkP5Im_IMG_4417.jpg?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Ym9hcmR8ZW58MHx8MHx8fDA%3D"
                 value={updatedProduct.image}
                 onChange={(e) =>
                   setUpdatedProduct({ ...updatedProduct, image: e.target.value })
