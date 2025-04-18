@@ -14,8 +14,17 @@ const Navbar = () => {
   const { user, logout } = useAuth(); // Get user state and logout function
 
   const handleLogout = () => {
+    // Clear all auth-related data
     logout();
-    navigate("/login");
+    
+    // Clear any product-related local storage
+    localStorage.removeItem("products");
+
+    // Clear React Query cache (if using)
+    // queryClient.clear();
+    
+    // Force hard redirect to clear all cached data
+    window.location.assign("/login");
   };
 
   return (
@@ -48,7 +57,12 @@ const Navbar = () => {
           {user ? (
             <>
               <Text>{`Hello, ${user.name}`}</Text>
-              <Button onClick={handleLogout} colorScheme="red">
+               <Button 
+                onClick={handleLogout} 
+                colorScheme="red"
+                // Add loading state if needed
+                isLoading={isLoggingOut}
+              >
                 Logout
               </Button>
             </>
