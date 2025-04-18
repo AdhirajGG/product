@@ -1,13 +1,14 @@
 import { create } from "zustand";
 
+const API_URL = process.env.VITE_API_URL || "http://localhost:5000/api";
+
 export const useProductStore = create((set) => ({
   products: [],
   setProducts: (products) => set({ products }),
-
   // Create Product
   createProduct: async (productData, token) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/products`, {
+      const response = await fetch(`${API_URL}/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
