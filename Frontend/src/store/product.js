@@ -4,40 +4,26 @@ export const useProductStore = create((set) => ({
   products: [],
   setProducts: (products) => set({ products }),
 
-  createProduct: async (newProduct) => {
-    if (!newProduct.name || !newProduct.price || !newProduct.image) {
-      return { success: false, message: "Please fill in all fields." };
-    }
+  createProduct: async (productData, token) => {
     try {
-      // Retrieve the token from localStorage
-      const token = localStorage.getItem("token");
-      console.log("Token in createProduct:", token); // Debug: Should log a valid token string
-
-      const res = await fetch("/api/products", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": token ? `Bearer ${token}` : "",
+          "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify(newProduct),
+        body: JSON.stringify(productData)
       });
+
+      const data = await response.json();
       
-      // Attempt to parse the response as JSON
-      const data = await res.json();
-      
-      if (!res.ok) {
-        return { success: false, message: data.message || "Failed to create product." };
+      if (!response.ok) {
+        return { success: false, message: data.message || "Failed to create product" };
       }
-      
-      // Update products state (ensure state.products is an array)
-      set((state) => ({
-        products: [...(Array.isArray(state.products) ? state.products : []), data.data],
-      }));
-      
-      return { success: true, message: "Product Created Successfully." };
+
+      return { success: true, message: "Product created successfully" };
     } catch (error) {
-      console.error("Error in createProduct:", error);
-      return { success: false, message: "An unexpected error occurred." };
+      return { success: false, message: error.message };
     }
   },
 
