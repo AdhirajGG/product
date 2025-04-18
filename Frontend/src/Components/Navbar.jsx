@@ -60,8 +60,6 @@ const Navbar = () => {
                <Button 
                 onClick={handleLogout} 
                 colorScheme="red"
-                // Add loading state if needed
-                isLoading={isLoggingOut}
               >
                 Logout
               </Button>
