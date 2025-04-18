@@ -8,6 +8,7 @@ import toast, { Toaster } from "react-hot-toast"; // Add toast import
 
  
 const API_URL = import.meta.env.VITE_API_URL;
+const apiurl = process.env.VITE_API_URL;
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,8 +18,10 @@ const LoginPage = () => {
  
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log("Login url", API_URL); // Debugging log
+    console.log("Login url 2", apiurl); // Debugging log
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
+      const response = await fetch(`https://product-ouex.onrender.com/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
