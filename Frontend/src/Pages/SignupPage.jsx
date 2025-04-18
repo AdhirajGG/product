@@ -4,9 +4,9 @@ import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { Input } from "@chakra-ui/react";
 import { useAuth } from "../Context/AuthContext.jsx";
 import toast, { Toaster } from "react-hot-toast";
-import dotenv from "dotenv";
 
-const URL = process.env.URL || "http://localhost:5173";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const SignupPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,7 +23,7 @@ const SignupPage = () => {
     }
 
     try {
-      const response = await fetch(`${URL}/api/auth/signup`, {
+      const response = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
