@@ -16,8 +16,8 @@ const __dirname = path.resolve();
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: URL,
-  credentials: true
+  origin: process.env.URL || "http://localhost:5173", // Allow both prod and dev
+  credentials: true, // Required for cookies/auth headers
 }));
 
 // Routes
