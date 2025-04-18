@@ -3,7 +3,7 @@ import { Container, Box, Typography, Button, Grid, Link } from "@mui/material";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useColorModeValue } from "../Components/ui/color-mode";
 import { Input } from "@chakra-ui/react";
-import { useAuth } from "../Context/authContext.jsx";
+import { useAuth } from "../Context/AuthContext.jsx";
 import toast, { Toaster } from "react-hot-toast"; // Add toast import
 
 const LoginPage = () => {
