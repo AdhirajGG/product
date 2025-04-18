@@ -39,13 +39,11 @@ const CreatePage = () => {
         throw new Error("Invalid price format");
       }
   
-      const { success, message } = await createProduct(
-        {
-          ...newProduct,
+      const { success, data } = await createProduct(
+        { ...newProduct, 
           price: numericPrice,
-          userId: user.id
-        }, 
-        token
+          userId: user._id },
+        token // Pass token explicitly
       );
   
       if (success) {

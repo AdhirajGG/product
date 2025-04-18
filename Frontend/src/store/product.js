@@ -4,30 +4,25 @@ import { create } from "zustand";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export const useProductStore = create((set) => ({
-  products: [],
-  setProducts: (products) => set({ products }),
-
-  // Create Product
   createProduct: async (productData, token) => {
     try {
-      const response = await fetch(`${API_URL}/products`, {
+      const response = await fetch(`${API_URL}/api/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Authorization": `Bearer ${token}` // MUST include this
         },
         body: JSON.stringify(productData)
       });
 
-      const data = await response.json();
-      
       if (!response.ok) {
-        return { success: false, message: data.message || "Failed to create product" };
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create product");
       }
 
-      return { success: true, data: data.data };
+      return await response.json();
     } catch (error) {
-      return { success: false, message: error.message };
+      throw error;
     }
   },
 

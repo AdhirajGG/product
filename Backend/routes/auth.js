@@ -31,7 +31,7 @@ router.post("/signup", async (req, res) => {
     const savedUser = await newUser.save();
 
     const token = jwt.sign(
-      { userId: savedUser._id },
+      { id: savedUser._id }, // 👈 Changed key from 'userId' to 'id'
       JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -77,7 +77,11 @@ router.post("/login", async (req, res) => {
     }
 
     // Generate a JWT token
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { id: savedUser._id }, // 👈 Changed key from 'userId' to 'id'
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     res.json({
       success: true,

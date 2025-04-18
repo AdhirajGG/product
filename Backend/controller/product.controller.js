@@ -46,17 +46,15 @@ export const getProducts = async (req, res) => {
   // In createProduct controller
   export const createProduct = async (req, res) => {
     try {
-      // Change 'user' to 'userId'
-      const product = await Product.create({ 
-        ...req.body, 
-        userId: req.user._id 
+      const product = await Product.create({
+        ...req.body,
+        userId: req.user.id // 👈 Ensure this matches your model
       });
-      res.status(201).json({ success: true, data: product });
+      res.status(201).json(product);
     } catch (error) {
-      res.status(400).json({ success: false, message: 'Invalid data' });
+      res.status(400).json({ message: error.message });
     }
-  };
-
+  }
 export const updateProduct = async (req, res) => {
     const { id } = req.params;
     const productData = req.body;
