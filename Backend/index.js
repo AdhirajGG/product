@@ -60,7 +60,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const CLIENT_URL = process.env.CLIENT_URL  || "http://localhost:5173";
+const CLIENT_URL = import.meta.env.CLIENT_URL  || "http://localhost:5173";
 
 // Middleware
 app.use(express.json());
@@ -92,6 +92,9 @@ app.use((err, req, res, next) => {
 
 // Database connection
 connectDB();
+console.log("Environment:", process.env.NODE_ENV);
+console.log("JWT Secret:", process.env.JWT_SECRET ? "✅ Loaded" : "❌ Missing");
+console.log("MongoDB URI:", process.env.MONGODB_URI?.substring(0, 25) + "...");
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

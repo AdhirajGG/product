@@ -40,9 +40,8 @@
 //     next();
 //   });
 // };
+
 import jwt from "jsonwebtoken";
-
-
 
 // Check both Authorization header and cookies
 export const protect = async (req, res, next) => {
@@ -63,7 +62,14 @@ export const protect = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded.id); // 👈 Use 'id' to match payload
+    try {
+      const user = await User.findById(decoded.id);
+      if (!user) throw new Error("User not found");
+      req.user = user;
+      next();
+    } catch (error) {
+      return res.status(401).json({ success: false, message: "User not found" });
+    }
     next();
   } catch (error) {
     return res.status(401).json({

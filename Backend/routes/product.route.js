@@ -121,7 +121,7 @@ const router = express.Router();
 
 // Use controller functions directly
 router.get("/products", protect, getProducts);
-router.post("/", protect, createProduct);
+router.post("/auth/login", protect, createProduct);
 router.put("/:id", protect, updateProduct);
 router.delete("/:id", protect, deleteProduct);
 

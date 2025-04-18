@@ -36,7 +36,7 @@ import Product from "../models/product.model.js";
 export const getProducts = async (req, res) => {
     try {
       // Change 'user' to 'userId' to match model schema
-      const products = await Product.find({ userId: req.user._id });
+      const products = await Product.find({ user: req.user._id });
       res.status(200).json({ success: true, data: products });
     } catch (error) {
       res.status(500).json({ success: false, message: 'Server error' });

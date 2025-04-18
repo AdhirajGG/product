@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET|| "your_jwt_secret";
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 
 // Signup Endpoint
 router.post("/signup", async (req, res) => {
@@ -58,43 +58,37 @@ router.post("/signup", async (req, res) => {
 
 // auth.js (corrected login route)
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
   try {
+    const { email, password } = req.body;
     const user = await User.findOne({ email });
     
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid credentials"
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Invalid credentials" 
       });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid credentials"
-      });
+    // Debug: Confirm JWT_SECRET is loaded
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is missing!");
+      throw new Error("JWT secret not configured");
     }
-
-    // Fix: Changed from savedUser._id to user._id
-    const token = jwt.sign(
-      { id: user._id }, // 👈 Corrected variable name
-      process.env.JWT_SECRET, // Ensure this is set
-      { expiresIn: "1h" }
-    );
-
-    res.json({
-      success: true,
-      token,
-      user: { id: user._id, name: user.name, email: user.email }
+   
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, { 
+      expiresIn: "1h" 
     });
-    
+
+    res.json({ 
+      success: true, 
+      token, 
+      user: { id: user._id, name: user.name, email: user.email } 
+    });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error - " + error.message
+    res.status(500).json({ 
+      success: false, 
+      message: "Internal server error - " + error.message 
     });
   }
 });
