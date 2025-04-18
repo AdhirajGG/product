@@ -24,29 +24,36 @@ const CreatePage = () => {
       toast.error("You must be logged in to create a product.");
       return;
     }
-
+  
+    // Add input validation
+    if (!newProduct.name || !newProduct.price || !newProduct.image) {
+      toast.error("Please fill all fields");
+      return;
+    }
+  
     setIsSubmitting(true);
-
+  
     try {
-      const { success, message } = await createProduct({
-        ...newProduct,
-        userId: user.id
-      }, token);
-
+      const numericPrice = parseFloat(newProduct.price);
+      if (isNaN(numericPrice)) {
+        throw new Error("Invalid price format");
+      }
+  
+      const { success, message } = await createProduct(
+        {
+          ...newProduct,
+          price: numericPrice,
+          userId: user.id
+        }, 
+        token
+      );
+  
       if (success) {
-        toast.success(message);
-        setNewProduct({ name: "", price: "", image: "" });
-        // Redirect after successful creation
-        navigate("/", {
-          state: { refresh: true }, // Optional: Trigger data refresh
-          replace: true
-        });
-      } else {
-        toast.error(message);
+        toast.success("Product created successfully!");
+        navigate("/");
       }
     } catch (error) {
-      console.error("Error creating product:", error);
-      toast.error("Error creating product. Please try again.");
+      toast.error(error.message || "Failed to create product");
     } finally {
       setIsSubmitting(false);
     }
