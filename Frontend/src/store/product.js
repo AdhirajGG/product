@@ -10,7 +10,7 @@ export const useProductStore = create((set) => ({
   // Create Product
   createProduct: async (productData, token) => {
     try {
-      const response = await fetch(`${API_URL}/api/products`, {
+      const response = await fetch(`${API_URL}/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,7 +34,7 @@ export const useProductStore = create((set) => ({
   // Fetch Products
   fetchProducts: async (token) => {
     try {
-      const response = await fetch(`${API_URL}/api/products`, {
+      const response = await fetch(`${API_URL}/products`, {
         headers: {
           "Authorization": `Bearer ${token}`
         },
@@ -58,7 +58,7 @@ export const useProductStore = create((set) => ({
   // Delete Product
   deleteProduct: async (pid, token) => {
     try {
-      const response = await fetch(`${API_URL}/api/products/${pid}`, {
+      const response = await fetch(`${API_URL}/products/${pid}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -83,7 +83,7 @@ export const useProductStore = create((set) => ({
   // Update Product
   updateProduct: async (pid, updatedProduct, token) => {
     try {
-      const response = await fetch(`${API_URL}/api/products/${pid}`, {
+      const response = await fetch(`${API_URL}/products/${pid}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
