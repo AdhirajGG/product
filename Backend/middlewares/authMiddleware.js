@@ -27,13 +27,13 @@
 
 // export const verifyToken = (req, res, next) => {
 //   const authHeader = req.headers.authorization;
-  
+
 //   if (!authHeader?.startsWith('Bearer ')) {
 //     return res.status(401).json({ message: 'Unauthorized' });
 //   }
 
 //   const token = authHeader.split(' ')[1];
-  
+
 //   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
 //     if (err) return res.status(403).json({ message: 'Forbidden' });
 //     req.user = decoded;
@@ -44,7 +44,7 @@ import jwt from "jsonwebtoken";
 
 export const protect = (req, res, next) => {
   let token;
-  
+
   // Check both Authorization header and cookies
   if (req.headers.authorization?.startsWith("Bearer ")) {
     token = req.headers.authorization.split(" ")[1];
@@ -53,9 +53,9 @@ export const protect = (req, res, next) => {
   }
 
   if (!token) {
-    return res.status(401).json({ 
-      success: false, 
-      message: "Not authorized, no token" 
+    return res.status(401).json({
+      success: false,
+      message: "Not authorized, no token"
     });
   }
 
@@ -65,9 +65,9 @@ export const protect = (req, res, next) => {
     next();
   } catch (error) {
     console.error("Token verification failed:", error);
-    return res.status(401).json({ 
-      success: false, 
-      message: "Not authorized, token failed" 
+    return res.status(401).json({
+      success: false,
+      message: "Not authorized, token failed"
     });
   }
 };

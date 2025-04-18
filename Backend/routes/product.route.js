@@ -27,7 +27,7 @@ import {
   updateProduct
 } from "../controller/product.controller.js";
 import { protect } from "../middlewares/authMiddleware.js"; // Fix typo in "middlewares"
-import Product from "../models/Product.model.js"; // Ensure Product model is imported
+import {Product} from "../models/Product.model.js"; // Ensure Product model is imported
 
 const router = express.Router();
 
