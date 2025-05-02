@@ -1,3 +1,221 @@
+
+// import React, { useState, useEffect } from "react";
+// import Modal from "react-modal";
+// import toast, { Toaster } from "react-hot-toast";
+// import { FaEdit, FaTrash } from "react-icons/fa";
+// import { FiX, FiCheck } from "react-icons/fi";
+// import { Atom } from "react-loading-indicators";
+// import { useProductStore } from "../store/product.js";
+
+// const CustomCard = ({ children, colors }) => (
+//   <div
+//     style={{
+//       boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+//       borderRadius: "0.5rem",
+//       overflow: "hidden",
+//       transition: "all 0.3s ease",
+//       margin: "0.5rem",
+//       padding: "1rem",
+//       backgroundColor: colors.bgLight,
+//       minHeight: "420px",
+//     }}
+//   >
+//     {children}
+//   </div>
+// );
+
+// const CustomInput = ({ label, ...props }) => (
+//   <div style={{ marginBottom: "1rem" }}>
+//     <label
+//       style={{
+//         display: "block",
+//         fontSize: "0.875rem",
+//         fontWeight: 500,
+//         color: "#4a5568",
+//         marginBottom: "0.5rem",
+//       }}
+//     >
+//       {label}
+//     </label>
+//     <input
+//       style={{
+//         width: "100%",
+//         padding: "0.75rem",
+//         borderRadius: "0.375rem",
+//         border: "1px solid #e2e8f0",
+//         fontSize: "1rem",
+//         transition: "border-color 0.2s",
+//         outline: "none",
+//       }}
+//       {...props}
+//     />
+//   </div>
+// );
+
+// const ProductCard = ({ product, onDeleteSuccess, onUpdateSuccess }) => {
+//   const colors = {
+//     textLight: "#4a5568",
+//     bgLight: "#ffffff",
+//     blue: "#3182ce",
+//     red: "#e53e3e",
+//     gray200: "#e2e8f0",
+//   };
+
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [updatedProduct, setUpdatedProduct] = useState(product);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const { deleteProduct, updateProduct } = useProductStore();
+
+//   useEffect(() => {
+//     if (isModalOpen) {
+//       setUpdatedProduct(product);
+//     }
+//   }, [isModalOpen, product]);
+
+//   const handleDeleteProduct = async (pid) => {
+//     setIsLoading(true);
+//     try {
+//       const { success, message } = await deleteProduct(pid);
+//       toast[success ? "success" : "error"](message);
+//       if (success && onDeleteSuccess) onDeleteSuccess();
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+//   const handleUpdateProduct = async () => {
+//     setIsLoading(true);
+//     try {
+//       const { success, message } = await updateProduct(product._id, updatedProduct);
+//       if (success) {
+//         toast.success(message || "Product updated successfully!");
+//         setIsModalOpen(false);
+//         if (onUpdateSuccess) onUpdateSuccess();
+//       } else {
+//         toast.error(message || "Failed to update product");
+//       }
+//     } catch (error) {
+//       console.error("Update error:", error);
+//       toast.error("An unexpected error occurred");
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+//   return (
+//     <CustomCard colors={colors}>
+//       <Toaster position="bottom-center" reverseOrder={false} />
+
+//       {/* Existing image and content rendering */}
+//       <img
+//         src={product.image}
+//         alt={product.name}
+//         style={{
+//           height: "16rem",
+//           width: "100%",
+//           objectFit: "cover",
+//           borderRadius: "0.375rem",
+//           minHeight: "250px",
+//         }}
+//         onError={(e) => {
+//           e.target.onerror = null;
+//           e.target.src = "https://images.unsplash.com/32/Mc8kW4x9Q3aRR3RkP5Im_IMG_4417.jpg?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Ym9hcmR8ZW58MHx8MHx8fDA%3D";
+//         }}
+//       />
+
+//       <div style={{ padding: "1rem" }}>
+//         <h3
+//           style={{
+//             fontSize: "1.125rem",
+//             fontWeight: 600,
+//             marginBottom: "0.5rem",
+//             color: colors.textLight,
+//           }}
+//         >
+//           {product.name}
+//         </h3>
+//         <p
+//           style={{
+//             fontWeight: "bold",
+//             fontSize: "1.25rem",
+//             color: colors.textLight,
+//             marginBottom: "1rem",
+//           }}
+//         >
+//           ${product.price}
+//         </p>
+
+//         <div style={{ display: "flex", gap: "0.5rem" }}>
+//           <button
+//             onClick={() => setIsModalOpen(true)}
+//             style={{
+//               padding: "0.5rem",
+//               borderRadius: "0.375rem",
+//               backgroundColor: colors.blue,
+//               color: "white",
+//               border: "none",
+//               cursor: "pointer",
+//             }}
+//           >
+//             <FaEdit />
+//           </button>
+//           <button
+//             onClick={() => handleDeleteProduct(product._id)}
+//             disabled={isLoading}
+//             style={{
+//               padding: "0.5rem",
+//               borderRadius: "0.375rem",
+//               color: "white",
+//               border: "none",
+//               backgroundColor: isLoading ? "#a0aec0" : colors.red,
+//               cursor: isLoading ? "not-allowed" : "pointer",
+//             }}
+//           >
+//             {isLoading ? (
+//               <Atom color="#ffffff" size="small" />
+//             ) : (
+//               <FaTrash />
+//             )}
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Existing modal implementation */}
+//       {isModalOpen && (
+//         <Modal
+//           isOpen={isModalOpen}
+//           onRequestClose={() => setIsModalOpen(false)}
+//           contentLabel="Edit Product"
+//           style={{
+//             overlay: {
+//               backgroundColor: "rgba(0, 0, 0, 0.5)",
+//               backdropFilter: "blur(8px)",
+//               zIndex: 1500,
+//             },
+//             content: {
+//               maxWidth: "500px",
+//               width: "90%",
+//               margin: "auto",
+//               padding: "0",
+//               borderRadius: "16px",
+//               border: "none",
+//               backgroundColor: "#f8fafc",
+//               boxShadow: "0px 8px 32px rgba(0, 0, 0, 0.18)",
+//               maxHeight: "90vh",
+//               overflowY: "auto",
+//             },
+//           }}
+//         >
+//           {/* Modal content remains the same */}
+//         </Modal>
+//       )}
+//     </CustomCard>
+//   );
+// };
+
+// export default ProductCard;
+
+
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import toast, { Toaster } from "react-hot-toast";

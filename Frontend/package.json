@@ -16,14 +16,16 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^6.4.4",
     "framer-motion": "^12.4.1",
+    "mern": "file:..",
     "next-themes": "^0.4.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hot-toast": "^2.5.2",
+    "react-hot-toast": "^2.5.1",
     "react-icons": "^5.4.0",
     "react-loading-indicators": "^1.0.0",
     "react-modal": "^3.16.3",
     "react-router-dom": "^7.1.5",
+    "vite": "^6.1.0",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
@@ -36,7 +38,6 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "globals": "^15.14.0",
-    "vite": "^6.1.0",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
