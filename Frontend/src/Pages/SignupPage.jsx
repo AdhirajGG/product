@@ -1,118 +1,4 @@
-// import React, { useState } from "react";
-// import {
-//   Container,
-//   Box,
-//   Typography,
-//   Button,
-//   Grid,
-//   Link,
-// } from "@mui/material";
-// import { useNavigate } from "react-router-dom";
-// // Using Chakra UI's Input for styling purposes
-// import { Input } from "@chakra-ui/react";
-
-// const SignupPage = () => {
-//   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
-//   const [isSubmitting, setIsSubmitting] = useState(false);
-//   const navigate = useNavigate();
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-  
-//     try {
-//       const response = await fetch("/api/auth/signup", { // Updated endpoint
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(formData)
-//       });
-  
-//       const data = await response.json();
-  
-//       if (!response.ok || !data.success) {
-//         // Handle signup error (e.g., display a message)
-//         console.error("Signup failed:", data.message || response.statusText);
-//         return;
-//       }
-  
-//       console.log("Signup successful:", data);
-//       // Navigate to login page after successful signup
-//       navigate("/login");
-//     } catch (error) {
-//       console.error("Error during signup:", error);
-//     }
-//   };
-  
-//   return (
-//     <Container maxWidth="sm">
-//       <Box
-//         sx={{
-//           mt: 8,
-//           p: 4,
-//           display: "flex",
-//           flexDirection: "column",
-//           alignItems: "center",
-//           border: "1px solid #ccc",
-//           borderRadius: "8px",
-//           boxShadow: 3,
-//         }}
-//       >
-//         <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-//           Sign Up
-//         </Typography>
-//         <Box component="form" onSubmit={handleSignup} noValidate sx={{ mt: 1, width: "100%" }}>
-//           <Input
-//             placeholder="Name"
-//             type="text"
-//             value={name}
-//             onChange={(e) => setName(e.target.value)}
-//             mb={4}  // Chakra spacing prop
-//             w="100%"
-//           />
-//           <Input
-//             placeholder="Email Address"
-//             type="email"
-//             placeholder="Email Address"
-//             value={formData.email}
-//             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-//             isRequired
-//           />
-//           <Input
-//             placeholder="Password"
-//             type="password"
-//             placeholder="Password"
-//             value={formData.password}
-//             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-//             isRequired
-//             minLength={6}
-//           />
-
-//           <Button
-//             type="submit"
-//             colorScheme="blue"
-//             isLoading={isSubmitting}
-//             loadingText="Creating Account..."
-//           >
-//             Sign Up
-//           </Button>
-//           <Grid container justifyContent="flex-end">
-//             <Grid item>
-//               <Link
-//                 component="button"
-//                 variant="body2"
-//                 onClick={() => navigate("/login")}
-//                 sx={{ textDecoration: "none" }}
-//               >
-//                 Already have an account? Login
-//               </Link>
-//             </Grid>
-//           </Grid>
-//         </Box>
-//       </Box>
-//     </Container>
-//   );
-// };
-
-// export default SignupPage;
+// path: Frontend/src/Pages/SignupPage.jsx
 import React, { useState } from "react";
 import { Container, Box, Typography, Button, Grid, Link } from "@mui/material";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
@@ -136,7 +22,7 @@ const SignupPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),

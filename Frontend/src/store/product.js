@@ -1,102 +1,14 @@
-
-// import { create } from "zustand";
-
-// // Use environment variable directly without additional path
-// const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-
-// export const useProductStore = create((set) => ({
-//   // Create Product
-//   createProduct: async (productData, token) => {
-//     try {
-//       const response = await fetch(`${API_URL}/products`, { // ✅ Correct endpoint: /api/products
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           "Authorization": `Bearer ${token}`
-//         },
-//         body: JSON.stringify(productData)
-//       });
-
-//       if (!response.ok) throw new Error("Failed to create product");
-//       return await response.json();
-//     } catch (error) {
-//       throw error;
-//     }
-//   },
-
-//   // Fetch Products
-//   fetchProducts: async (token) => {
-//     try {
-//       const response = await fetch(`${API_URL}/products`, { // ✅ Correct endpoint: /api/products
-//         headers: { "Authorization": `Bearer ${token}` }
-//       });
-
-//       const data = await response.json();
-      
-//       if (!response.ok) {
-//         set({ products: [] });
-//         throw new Error(data.message || "Failed to fetch products");
-//       }
-
-//       set({ products: data.data });
-//     } catch (error) {
-//       set({ products: [] });
-//       throw error;
-//     }
-//   },
-
-//   // Delete Product
-//   deleteProduct: async (productId, token) => {
-//     try {
-//       const response = await fetch(`${API_URL}/products/${productId}`, { // ✅ Correct endpoint
-//         method: "DELETE",
-//         headers: { "Authorization": `Bearer ${token}` }
-//       });
-
-//       if (!response.ok) throw new Error("Failed to delete product");
-      
-//       set((state) => ({
-//         products: state.products.filter((p) => p._id !== productId)
-//       }));
-//     } catch (error) {
-//       throw error;
-//     }
-//   },
-
-//   // Update Product
-//   updateProduct: async (productId, updatedData, token) => {
-//     try {
-//       const response = await fetch(`${API_URL}/products/${productId}`, { // ✅ Correct endpoint
-//         method: "PUT",
-//         headers: {
-//           "Content-Type": "application/json",
-//           "Authorization": `Bearer ${token}`
-//         },
-//         body: JSON.stringify(updatedData)
-//       });
-
-//       if (!response.ok) throw new Error("Failed to update product");
-      
-//       const updatedProduct = await response.json();
-//       set((state) => ({
-//         products: state.products.map((p) => 
-//           p._id === productId ? updatedProduct : p
-//         )
-//       }));
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-// }));
+// path: Frontend/src/store/product.js
 
 import { create } from "zustand";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ""
 export const useProductStore = create((set) => ({
   products: [],
   setProducts: (products) => set({ products }),
   resetProducts: () => {
     set({ products: [] });
   },
+  
   createProduct: async (newProduct) => {
     if (!newProduct.name || !newProduct.price || !newProduct.image) {
       return { success: false, message: "Please fill in all fields." };
@@ -106,7 +18,7 @@ export const useProductStore = create((set) => ({
       const token = localStorage.getItem("token");
       console.log("Token in createProduct:", token); // Debug: Should log a valid token string
 
-      const res = await fetch("/api/products", {
+      const res = await fetch(`${API_BASE_URL}/api/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +54,8 @@ export const useProductStore = create((set) => ({
         console.error("No token found");
         return { success: false, message: "Not authenticated" };
       }
-      const res = await fetch(`/api/products`, {
+    
+      const res = await fetch(`${API_BASE_URL}/api/products`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -153,7 +66,7 @@ export const useProductStore = create((set) => ({
       const data = await res.json();
       set({ products: Array.isArray(data.data) ? data.data : [] });
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching products:", error); 
       set({ products: [] });
       return { success: false, message: error.message };
     }
@@ -162,7 +75,7 @@ export const useProductStore = create((set) => ({
   deleteProduct: async (pid) => {
     try {
       const token = localStorage.getItem("token")?.trim();
-      const res = await fetch(`/api/products/${pid}`, {
+      const res = await fetch(`${API_BASE_URL}/api/products/${pid}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -184,7 +97,7 @@ export const useProductStore = create((set) => ({
   updateProduct: async (pid, updatedProduct) => {
     try {
       const token = localStorage.getItem("token")?.trim();
-      const res = await fetch(`/api/products/${pid}`, {
+      const res = await fetch(`${API_BASE_URL}/api/products/${pid}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
