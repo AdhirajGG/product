@@ -93,7 +93,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { FaPlusSquare } from "react-icons/fa";
 import { useCustomTheme } from "../hooks/useCustomTheme";
 import { useColorModeValue } from "./ui/color-mode.jsx";
-import { useAuth } from "../Context/authContext.jsx"; // Ensure the correct path
+import { useAuth } from "../Context/AuthContext.jsx"; // Ensure the correct path
 
 const Navbar = () => {
   const { theme, toggleTheme } = useCustomTheme();

@@ -59,6 +59,7 @@
 
 // src/Context/authContext.jsx
 import React, { createContext, useContext, useState } from "react";
+import { useProductStore } from "../store/product";
 
 const AuthContext = createContext();
 
@@ -82,9 +83,11 @@ export const AuthProvider = ({ children }) => {
   //   localStorage.removeItem("user");
   //   setUser(null);
   // };
+  const { resetProducts } = useProductStore(); 
   const logout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token"); // Clear token
+    resetProducts();
     setUser(null);
   };
 
