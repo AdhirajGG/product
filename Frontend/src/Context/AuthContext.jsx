@@ -1,7 +1,6 @@
 // path: Frontend/src/Components/ProductList.jsx
 import React, { createContext, useContext, useState } from "react";
 import { useProductStore } from "../store/product";
-
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -24,6 +23,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token"); // Clear token
     resetProducts();
     setUser(null);
+    navigate("/login");
   };
 
   return (
@@ -34,3 +34,4 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+

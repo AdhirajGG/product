@@ -60,9 +60,11 @@ router.post("/signup", async (req, res) => {
 // Login Endpoint
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  
   try {
     // Find the user by email
     const user = await User.findOne({ email });
+    
     if (!user) {
       return res
         .status(400)
@@ -78,7 +80,7 @@ router.post("/login", async (req, res) => {
     }
 
     // Generate a JWT token
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ userId: user._id },JWT_SECRET, { expiresIn: "1h" });
     console.log("Generated Token:", token); // Debug
     res.json({
       success: true,

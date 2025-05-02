@@ -16,9 +16,10 @@ app.use(express.json());
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true, // ✅ Already present
   exposedHeaders: ["set-cookie"], // Add if needed
-  allowedHeaders: ["Content-Type", "Authorization"], // Add this
+  allowedHeaders: ["Content-Type", "Authorization"], // Add this  
 }));
 
 // Add this code ABOVE your routes

@@ -29,7 +29,7 @@ export const useProductStore = create((set) => ({
       
       // Attempt to parse the response as JSON
       const data = await res.json();
-      
+
       if (!res.ok) {
         return { success: false, message: data.message || "Failed to create product." };
       }
